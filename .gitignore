@@ -1,0 +1,9 @@
+# secrets — never commit these
+.env
+.env.*
+!.env.example
+*.dbpassword
+*.key
+*.pem
+credentials*.json
+session/

@@ -1,0 +1,42 @@
+name: immich
+services:
+  immich-server:
+    container_name: immich_server
+    image: ghcr.io/immich-app/immich-server:release
+    volumes:
+      - ${UPLOAD_LOCATION}:/data
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      TZ: Asia/Kolkata
+      DB_HOSTNAME: database
+      DB_USERNAME: postgres
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE_NAME: immich
+      DB_PORT: 5432
+      REDIS_HOSTNAME: redis
+      REDIS_PORT: 6379
+      # ML disabled entirely (v3 kill switch; no immich-machine-learning container)
+      IMMICH_MACHINE_LEARNING_ENABLED: 'false'
+    ports:
+      - '2283:2283'
+    depends_on:
+      - database
+      - redis
+    restart: always
+  redis:
+    container_name: immich_redis
+    image: docker.io/valkey/valkey:9
+    restart: always
+  database:
+    container_name: immich_postgres
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: postgres
+      POSTGRES_DB: immich
+      POSTGRES_INITDB_ARGS: '--data-checksums'
+    volumes:
+      - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
+    shm_size: 128mb
+    restart: always
+# DB password lives in ~/immich/.dbpassword; .env is generated from it (chmod 600)
