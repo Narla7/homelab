@@ -34,6 +34,8 @@ Movie/media server on **8096**, official `jellyfin/jellyfin` image run with `use
 
 Media is bind-mounted **read-only**: `~/media` (`/media` — where Radarr is meant to import) and `~/torrents` (`/torrents`). Since the mounts are `:ro`, Jellyfin writes all metadata/NFO/trickplay to `/config` instead of next to the files, which is the behavior I want anyway. No hardware acceleration — transcoding is CPU-only ffmpeg, fine on the i5 for one stream.
 
+Setup was done through the web wizard (v12 dropped the `/Startup/*` user-creation API): admin account `narla`, two libraries — **Movies** (`/media/movies`, type movies) and **Torrents** (`/torrents`, mixed). Library folders stay read-only, so Jellyfin indexes whatever lands in `~/torrents` directly; Radarr-owned movies will appear under `/media/movies` once a Radarr root folder points there.
+
 No DLNA/host networking — published port only, everything reaches it over Tailscale with the raw IP.
 
 ## The *arr stack + qBittorrent
