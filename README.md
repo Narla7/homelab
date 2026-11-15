@@ -25,6 +25,7 @@ Details in [docs/hardware.md](docs/hardware.md).
 |---|---|---|
 | [Immich](https://immich.app) | Google Photos replacement. Machine learning is fully disabled — this box doesn't have the RAM for it. | 2283 |
 | [Navidrome](https://navidrome.org) | Music server, Subsonic API — my phone plays from it with Tempo. | 4533 |
+| [Jellyfin](https://jellyfin.org) | Movies (and anything else I point it at), transcoding on CPU | 8096 |
 | [Radarr](https://radarr.video) | Movie automation | 7878 |
 | [Prowlarr](https://prowlarr.com) | Indexer manager, wires into Radarr + BookOrbit | 9696 |
 | [qBittorrent](https://qbittorrent.org) | Download client | 8080 |

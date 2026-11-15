@@ -8,6 +8,7 @@ Every service is a Docker container in its own `~/<service>/` directory with its
 |---|---|
 | 2283 | Immich |
 | 4533 | Navidrome |
+| 8096 | Jellyfin |
 | 7878 | Radarr |
 | 9696 | Prowlarr |
 | 8080 | qBittorrent WebUI (6881 = BitTorrent) |
@@ -26,6 +27,14 @@ All WebUIs publish on `0.0.0.0` but the only routable path to them is Tailscale 
 ## Navidrome
 
 Music server over the Subsonic API. Library lives in `~/Music`. Clients (Tempo on my phone) hit it directly on the Tailscale IP. Flac-to-mp3 conversions handled by a `flac2mp3.sh` helper in `$HOME`.
+
+## Jellyfin
+
+Movie/media server on **8096**, official `jellyfin/jellyfin` image run with `user: 1000:1000` (the official image manages its own uid, no PUID/PGID envs). Config and cache live in `~/jellyfin/{config,cache}`, both user-owned so the database survives container recreation.
+
+Media is bind-mounted **read-only**: `~/media` (`/media` — where Radarr is meant to import) and `~/torrents` (`/torrents`). Since the mounts are `:ro`, Jellyfin writes all metadata/NFO/trickplay to `/config` instead of next to the files, which is the behavior I want anyway. No hardware acceleration — transcoding is CPU-only ffmpeg, fine on the i5 for one stream.
+
+No DLNA/host networking — published port only, everything reaches it over Tailscale with the raw IP.
 
 ## The *arr stack + qBittorrent
 
